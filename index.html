@@ -2,26 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🎟️ Lottery Checker</title>
+  <title>🎟️ Laxmi Store Lottery Checker</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+      background: linear-gradient(to right, #fceabb, #f8b500);
       margin: 0;
       padding: 2rem;
       color: #333;
     }
 
-    h1 {
+    h1, h2 {
       text-align: center;
-      color: #1f3b4d;
-      font-size: 2.5rem;
+      color: #2c2c2c;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: normal;
     }
 
     .checker-box {
       max-width: 500px;
       margin: 2rem auto;
-      background: #ffffffee;
+      background: #fff8e1;
       border-radius: 12px;
       padding: 2rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -42,7 +51,7 @@
     }
 
     button {
-      background: #0077ff;
+      background: #e67e22;
       color: white;
       cursor: pointer;
       width: 100%;
@@ -50,7 +59,7 @@
     }
 
     button:hover {
-      background: #005ccc;
+      background: #d35400;
     }
 
     .result {
@@ -68,7 +77,7 @@
     }
 
     .card {
-      background-color: #ffffffcc;
+      background-color: #fff9c4;
       border-radius: 10px;
       padding: 1rem;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -100,13 +109,17 @@
       text-align: center;
       margin-top: 4rem;
       color: #333;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎉 Check Your Lottery Number</h1>
+  <h1>Laxmi Store</h1>
+  <h2>Neta Road, Motipur<h2>
+  <h2>🎉 Lottery Number Checker🎉 </h2>
+
   <div class="checker-box">
     <input type="text" id="lotteryInput" placeholder="Enter your lottery number">
     <button onclick="checkNumber()">Check Prize</button>
@@ -118,7 +131,7 @@
   </div>
 
   <footer>
-    Made with ❤️ for your lucky day!
+    Thank you for visiting Laxmi Store!
   </footer>
 
   <script>
@@ -135,21 +148,26 @@
     };
 
     function checkNumber() {
-      const input = document.getElementById("lotteryInput").value.trim();
+      const inputRaw = document.getElementById("lotteryInput").value.trim();
+      const input = inputRaw.replace(/^0+/, ''); // strip leading zeros from user input
       const resultBox = document.getElementById("resultBox");
       let found = false;
 
       for (let prize in prizes) {
-        if (prizes[prize].includes(input)) {
-          resultBox.innerHTML = `🎉 <span class="highlight">${input}</span> won <strong>${prize}</strong>!`;
-          found = true;
-          highlightCard(prize, input);
-          break;
+        for (let originalNum of prizes[prize]) {
+          const matchable = originalNum.replace(/^0+/, ''); // convert stored number to compare form
+          if (matchable === input) {
+            resultBox.innerHTML = `🎉 <span class="highlight">${originalNum}</span> won <strong>${prize}</strong>!`;
+            highlightCard(prize, originalNum);
+            found = true;
+            break;
+          }
         }
+        if (found) break;
       }
 
       if (!found) {
-        resultBox.innerHTML = `❌ No prize for <span class="highlight">${input}</span>. Try again!`;
+        resultBox.innerHTML = `❌ No prize for <span class="highlight">${inputRaw}</span>. Try again!`;
         clearHighlights();
       }
     }
