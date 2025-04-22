@@ -2,33 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lottery Number Checker</title>
+  <title>🎟️ Lottery Checker</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 2rem;
-      background-color: #f4faff;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+      margin: 0;
+      padding: 2rem;
+      color: #333;
     }
+
     h1 {
-      color: #2c3e50;
+      text-align: center;
+      color: #1f3b4d;
+      font-size: 2.5rem;
     }
+
+    .checker-box {
+      max-width: 500px;
+      margin: 2rem auto;
+      background: #ffffffee;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
     input, button {
-      padding: 0.5rem;
+      padding: 0.8rem;
       font-size: 1rem;
+      margin: 0.3rem 0;
+      border: none;
+      border-radius: 6px;
     }
+
+    input {
+      width: calc(100% - 16px);
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #0077ff;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #005ccc;
+    }
+
     .result {
       margin-top: 1rem;
       font-size: 1.2rem;
+      text-align: center;
       font-weight: bold;
-      color: #006400;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background-color: #ffffffcc;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card span {
+      font-size: 0.95rem;
+      display: block;
+      color: #333;
+    }
+
+    .highlight {
+      color: green;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      color: #333;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <h1>Lottery Number Checker</h1>
-  <input type="text" id="lotteryInput" placeholder="Enter your lottery number">
-  <button onclick="checkNumber()">Check</button>
-  <div class="result" id="resultBox"></div>
+
+  <h1>🎉 Check Your Lottery Number</h1>
+  <div class="checker-box">
+    <input type="text" id="lotteryInput" placeholder="Enter your lottery number">
+    <button onclick="checkNumber()">Check Prize</button>
+    <div class="result" id="resultBox">Good luck! 🍀</div>
+  </div>
+
+  <div class="grid" id="prizeGrid">
+    <!-- Cards populated by script -->
+  </div>
+
+  <footer>
+    Made with ❤️ for your lucky day!
+  </footer>
 
   <script>
     const prizes = {
@@ -50,16 +141,67 @@
 
       for (let prize in prizes) {
         if (prizes[prize].includes(input)) {
-          resultBox.textContent = `🎉 Congratulations! You won: ${prize}`;
+          resultBox.innerHTML = `🎉 <span class="highlight">${input}</span> won <strong>${prize}</strong>!`;
           found = true;
+          highlightCard(prize, input);
           break;
         }
       }
 
       if (!found) {
-        resultBox.textContent = "❌ Sorry, no prize for this number.";
+        resultBox.innerHTML = `❌ No prize for <span class="highlight">${input}</span>. Try again!`;
+        clearHighlights();
       }
     }
+
+    function populateGrid() {
+      const grid = document.getElementById("prizeGrid");
+      for (let prize in prizes) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.setAttribute("data-prize", prize);
+
+        const header = document.createElement("h3");
+        header.textContent = prize;
+        card.appendChild(header);
+
+        prizes[prize].forEach(num => {
+          const span = document.createElement("span");
+          span.textContent = num;
+          card.appendChild(span);
+        });
+
+        grid.appendChild(card);
+      }
+    }
+
+    function highlightCard(prizeName, matchedNumber) {
+      clearHighlights();
+      const cards = document.querySelectorAll(".card");
+      cards.forEach(card => {
+        if (card.getAttribute("data-prize") === prizeName) {
+          card.style.border = "2px solid green";
+          card.querySelectorAll("span").forEach(span => {
+            if (span.textContent === matchedNumber) {
+              span.style.color = "green";
+              span.style.fontWeight = "bold";
+            }
+          });
+        }
+      });
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll(".card").forEach(card => {
+        card.style.border = "none";
+        card.querySelectorAll("span").forEach(span => {
+          span.style.color = "#333";
+          span.style.fontWeight = "normal";
+        });
+      });
+    }
+
+    populateGrid();
   </script>
 </body>
 </html>
