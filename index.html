@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lottery Number Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f4faff;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #006400;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lottery Number Checker</h1>
+  <input type="text" id="lotteryInput" placeholder="Enter your lottery number">
+  <button onclick="checkNumber()">Check</button>
+  <div class="result" id="resultBox"></div>
+
+  <script>
+    const prizes = {
+      "Car Maruti": ["324212"],
+      "Honda Shine": ["648453", "228861", "714189", "468625", "484947"],
+      '32" TV': ["039583", "157679", "301913", "100487"],
+      "Washing Machine": ["621394", "018923", "012675"],
+      "Cooler": ["040867", "059045", "318719", "088877", "028490", "182223"],
+      "Mixer": ["003742"],
+      "Stand Fan": ["008500", "001276"],
+      "Rungta Wall Clock": ["000965", "007124", "000751", "001011"],
+      "RT Masala Tea": ["000106", "000008", "002412", "003622"]
+    };
+
+    function checkNumber() {
+      const input = document.getElementById("lotteryInput").value.trim();
+      const resultBox = document.getElementById("resultBox");
+      let found = false;
+
+      for (let prize in prizes) {
+        if (prizes[prize].includes(input)) {
+          resultBox.textContent = `🎉 Congratulations! You won: ${prize}`;
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        resultBox.textContent = "❌ Sorry, no prize for this number.";
+      }
+    }
+  </script>
+</body>
+</html>
